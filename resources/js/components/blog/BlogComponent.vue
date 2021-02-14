@@ -1,0 +1,334 @@
+<template>
+    <v-app id="inspire">
+        <v-snackbar v-model="snackbar" right top rounded="pill" :color="color" >{{text}}
+            <template v-slot:action="{ attrs }">
+                <v-btn color="white" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+            </template>
+        </v-snackbar>
+        <v-container fluid>
+            <!-- breadcrumbs -->
+            <v-breadcrumbs :items="breadcrumbItems">
+                <template v-slot:divider>
+                    <v-icon>mdi-chevron-right</v-icon>
+                </template>
+            </v-breadcrumbs>
+            <!-- breadcrumbs End-->
+
+            <!-- Data Table-->
+            <v-card>
+                <v-toolbar flat >
+                    <v-toolbar-title>Blogs List</v-toolbar-title>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" color="deep-purple" single-line hide-details ></v-text-field>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-btn color="cyan" small dark class="mb-2">Print</v-btn>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-btn color="red" small dark class="mb-2">Delete</v-btn>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-btn color="deep-purple" small dark class="mb-2" @click="createBtn"><v-icon dark small> mdi-plus </v-icon>Add New</v-btn>
+                </v-toolbar>
+                <!-- datatable -->                        
+                <v-data-table class="elevation-1" :headers="headers" :items="blogs" :search="search" :loading="loading"
+                    loading-text="Loading... Please wait" :footer-props="{itemsPerPageOptions: [5,10,15],itemsPerPageText: 'Data Per Page','show-current-page': true,'show-first-last-page': true}">
+                    <template v-slot:[`item.actions`]="{ item }" >
+                        <v-icon small color="cyan" class="mr-2" @click="editBtn(item.id)"> mdi-pencil </v-icon>
+                        <v-icon small color="red"  @click="deleteBtn(item.id)"> mdi-delete </v-icon>
+                    </template>
+                </v-data-table>
+                <!-- End datatable -->
+            </v-card>
+            <!-- Delete Modal -->
+            <v-row justify="center">
+                <v-dialog
+                    v-model="deleteDialog"
+                    persistent
+                    max-width="290"
+                >
+                <form @submit.prevent="deleteData()" enctype="multipart/form-data">
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">Warning!!!</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-container>
+                                <v-row>
+                                    <h3>Are You Sure???</h3>
+                                </v-row>
+                                </v-container>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="red darken-1" text @click="deleteDialog = false">No</v-btn>
+                                <v-btn type="submit" color="green darken-1" text>Yes</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </form>
+                </v-dialog>
+            </v-row>
+
+            <!-- Update Modal -->
+            <v-row justify="center">
+                <v-dialog
+                    v-model="updateDialog"
+                    persistent
+                    max-width="600px"
+                >
+                 <form @submit.prevent="updateBlogs()" enctype="multipart/form-data">
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">Update Blog</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-text-field label="Title" v-model="actionData.title" hint="Enter Blog Title Here"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-text-field label="Body" v-model="actionData.body" hint="Enter Blog Body Here"></v-text-field>
+                                </v-col>
+                            </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="red darken-1" text @click="updateDialog = false">Cancel</v-btn>
+                            <v-btn type="submit" color="green darken-1" text> Submit</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                 </form>
+                </v-dialog>
+            </v-row>
+
+            <!-- Create Modal -->
+            <v-row justify="center">
+                <v-dialog
+                    v-model="createDialog"
+                    persistent
+                    max-width="600px"
+                >
+                 <v-form @submit.prevent="createBlogs()" enctype="multipart/form-data" v-model="valid" lazy-validation>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">New Blog</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-text-field label="Title" v-model="title" :counter="6" :rules="titleRules" hint="Enter Blog Title Here" required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-text-field label="Body" v-model="body" hint="Enter Blog Body Here"></v-text-field>
+                                </v-col>
+                            </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="red darken-1" text @click="createDialog = false">Cancel</v-btn>
+                            <v-btn type="submit" color="green darken-1" text :disabled="!valid"> Submit</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-form>
+                </v-dialog>
+            </v-row>
+        </v-container>
+  </v-app>
+</template>
+
+<script>
+    export default {
+        data () {
+            return {
+                title:'',
+                body:'',
+                search: '',
+                color:'',
+                loading: false,
+                snackbar: false,
+                text: '',
+                createDialog:false,
+                updateDialog:false,
+                deleteDialog: false,
+                headers: [
+                    { text: 'ID', align: 'start', sortable: true, value: 'id'},
+                    { text: 'Title', align: 'start', sortable: false, value: 'title'},
+                    { text: 'Body', align: 'start', sortable: true, value: 'body'},
+                    { text: 'Date', align: 'start', sortable: true, value: 'created_at'},
+                    { text: 'Actions', value: 'actions', sortable: false },
+                ],
+                blogs: [],
+                actionData:[],
+                breadcrumbItems: [
+                    {
+                        text: 'Dashboard',
+                        disabled: false,
+                        href: '/#/admin',
+                    },
+                     {
+                        text: 'Users',
+                        disabled: false,
+                        href: '/#/users',
+                    },
+                    {
+                        text: 'Roles',
+                        disabled: false,
+                        href: '/#/roles',
+                    },
+                    {
+                        text: 'Permissions',
+                        disabled: true,
+                    },
+                ],
+                valid: true,
+                titleRules: [
+                    v => !!v || 'Title is required',
+                    v => (v && v.length <= 10) || 'Title must be less than 6 characters',
+                ],
+            }
+        },
+
+        created() {         
+            this.getBlogs();
+            this.reset();
+        },
+
+        methods:{
+            getBlogs(){
+                this.loading = true;
+                axios
+                    .get("/api/blogs")
+                    .then((response) => {
+                        console.log(response.data);
+                        this.blogs = response.data;
+                        this.loading = false;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.loading = false;
+                    });
+            },
+
+            createBtn() {
+                this.createDialog = true;
+            },
+            createBlogs() {
+                this.loading = true;
+                const config = {
+                    headers: {
+                        "content-type": "multipart/form-data",
+                    },
+                };
+                let formData = new FormData();
+                    formData.append("title", this.title);
+                    formData.append("body", this.body);
+                axios
+                    .post("api/blogs", formData, config)
+                    .then(() => {
+                        this.color = 'green';
+                        this.snackbar = true;
+                        this.text = "Record Added Successfully!";
+                        this.getBlogs();
+                        this.title='';
+                        this.body='';
+                        this.createDialog=false;
+                        this.loading = false;
+                        
+                    })
+                    .catch((error) => {
+                        this.color = 'red';
+                        this.snackbar = true;
+                        this.text = "Something is Wrong! Try Again!";
+                        this.createDialog=false;
+                        this.loading = false;
+                    });
+            },
+
+            reset(){
+                this.title='';
+                this.body='';
+                console.log("Ready to reset")
+            },
+           
+            editBtn(id) {
+                 axios
+                    .get("/api/blogs/" + id)
+                        .then((response) => {
+                            this.actionData = response.data;
+                            this.updateDialog=true;
+                            console.log('edit data:',this.actionData);
+                        })
+                    .catch((error) => {
+                        alert("unable to get action data");
+                    });
+            },
+            updateBlogs(){
+                this.loading = true;
+                const config = {
+                    headers: {
+                        "content-type": "multipart/form-data",
+                    },
+                };
+                let formData = new FormData();
+                    formData.append("title", this.actionData.title);
+                    formData.append("body", this.actionData.body);
+                    formData.append("_method", "put");
+                axios
+                    .post("api/blogs/" + this.actionData.id, formData, config)
+                    .then(() => {
+                        this.color = 'green';
+                        this.snackbar = true;
+                        this.text = "Record Updated Successfully!";
+                        this.title='';
+                        this.body='';
+                        this.updateDialog=false;
+                        this.getBlogs();
+                        this.loading = false;
+                    })
+                    .catch(() => {
+                        this.color = 'red';
+                        this.snackbar = true;
+                        this.text = "Something is Wrong! Try Again!";
+                        this.updateDialog=false;
+                        this.loading = false;
+                    });
+            },
+
+            deleteBtn(id) {
+                axios
+                    .get("/api/blogs/" + id)
+                        .then((response) => {
+                            this.actionData = response.data;
+                            console.log('delete data:',this.actionData);
+                            this.deleteDialog = true;
+                        })
+                    .catch((error) => {
+                        alert("unable to get action data");
+                    });
+            },
+            deleteData(){
+                this.loading = true;
+                axios
+                    .delete("api/blogs/" + this.actionData.id)
+                    .then(() => {
+                        this.color = 'green';
+                        this.snackbar = true;
+                        this.text = "Record Deleted Successfully!";
+                        this.getBlogs();
+                        this.deleteDialog = false;
+                        this.loading = false;
+                    })
+                    .catch(() => {
+                        this.color = 'red';
+                        this.snackbar = true;
+                        this.text = "Something is Wrong! Try Again!";
+                        this.deleteDialog = false;
+                        this.loading = false;
+                    })
+            }
+        }
+    }
+</script>
