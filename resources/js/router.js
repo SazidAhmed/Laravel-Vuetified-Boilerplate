@@ -15,6 +15,7 @@ import PermissionsComponent from './components/users/PermissionsComponent';
 import ProfileComponent from './components/users/ProfileComponent';
 //Blog Components
 import BlogComponent from './components/blog/BlogComponent';
+import VuexComponent from './components/blog/VuexComponent';
 
 import axios from 'axios';
 
@@ -69,6 +70,11 @@ const routes =[
                 path: '/settings',
                 component: SettingsComponent,
                 name:'Settings',
+            },
+            {
+                path: '/vuex',
+                component: VuexComponent,
+                name:'Vuex',
             },
             {
                 path: '/blogs',

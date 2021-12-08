@@ -15,9 +15,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded=[];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -39,5 +37,13 @@ class User extends Authenticatable
 
     public function role(){
         return $this->hasOne(Role::class,'id','role_id');
+    }
+
+    public function profile(){
+        return $this->hasOne(Profile::class)->withDefault();
+    }
+    
+    public function isAdmin(){
+        return strtolower($this->role->name) === 'admin';
     }
 }

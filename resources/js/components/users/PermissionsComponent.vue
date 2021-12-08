@@ -25,8 +25,6 @@
                 </v-data-table>
                 <!-- End datatable -->
             </v-card>
-
-           {{authUserPermissions}}
              <!-- Create Modal -->
             <v-row justify="center">
                 <v-dialog
@@ -361,9 +359,8 @@
                 axios
                     .post("api/userPermissions/", formData)
                     .then((res) => {
-                    //    console.log(res.data.permissions);
                        this.authUserPermissions = res.data.permissions;
-                       console.log('authUserPermissions:',this.authUserPermissions);
+                    //    console.log('authUserPermissions:',this.authUserPermissions);
                     })
                     .catch((error) => {
                         console.log(error);

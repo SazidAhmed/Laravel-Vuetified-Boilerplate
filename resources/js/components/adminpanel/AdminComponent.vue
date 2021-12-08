@@ -156,6 +156,7 @@
                         ],
                     },
                     { icon: "mdi-account-supervisor-circle", text: "Blog",url: '/blogs',},
+                    { icon: "mdi-settings", text: "Vuex", url: '/vuex' },
                     { icon: "mdi-settings", text: "Settings", url: '/settings', },
                 ],
 

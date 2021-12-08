@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -2149,6 +2161,10 @@ __webpack_require__.r(__webpack_exports__);
         url: '/blogs'
       }, {
         icon: "mdi-settings",
+        text: "Vuex",
+        url: '/vuex'
+      }, {
+        icon: "mdi-settings",
         text: "Settings",
         url: '/settings'
       }],
@@ -2643,8 +2659,8 @@ __webpack_require__.r(__webpack_exports__);
         'password': this.password
       }).then(function (res) {
         console.log(res.data);
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('permissions', res.data.permissions);
+        localStorage.setItem('token', res.data.token); // localStorage.setItem('permissions', res.data.permissions)
+
         localStorage.setItem('loggedIn', true);
 
         _this.$router.push('/admin');
@@ -2844,11 +2860,185 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      category: '',
       title: '',
       body: '',
+      active: 'Yes',
+      date: '',
+      time: '',
+      image: null,
+      menu: false,
+      menu2: false,
+      editDate: false,
+      editTime: false,
       search: '',
       color: '',
       loading: false,
@@ -2863,6 +3053,11 @@ __webpack_require__.r(__webpack_exports__);
         sortable: true,
         value: 'id'
       }, {
+        text: 'Category',
+        align: 'start',
+        sortable: false,
+        value: 'category'
+      }, {
         text: 'Title',
         align: 'start',
         sortable: false,
@@ -2873,14 +3068,34 @@ __webpack_require__.r(__webpack_exports__);
         sortable: true,
         value: 'body'
       }, {
+        text: 'Active',
+        align: 'start',
+        sortable: true,
+        value: 'active'
+      }, {
         text: 'Date',
         align: 'start',
         sortable: true,
-        value: 'created_at'
+        value: 'date'
+      }, {
+        text: 'Time',
+        align: 'start',
+        sortable: true,
+        value: 'time'
       }, {
         text: 'Actions',
         value: 'actions',
         sortable: false
+      }],
+      categories: [{
+        id: 1,
+        name: 'React'
+      }, {
+        id: 2,
+        name: 'Vue'
+      }, {
+        id: 3,
+        name: 'Angular'
       }],
       blogs: [],
       actionData: [],
@@ -2913,13 +3128,18 @@ __webpack_require__.r(__webpack_exports__);
     this.reset();
   },
   methods: {
+    uploadPhoto: function uploadPhoto() {
+      if (this.image != null) {
+        console.log('ok'); // console.log(e);
+      } // this.image = e.target.files[0];
+
+    },
     getBlogs: function getBlogs() {
       var _this = this;
 
       this.loading = true;
       axios.get("/api/blogs").then(function (response) {
-        console.log(response.data);
-        _this.blogs = response.data;
+        _this.blogs = response.data.blogs;
         _this.loading = false;
       })["catch"](function (error) {
         console.log(error);
@@ -2933,14 +3153,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.loading = true;
+      console.log(this.image, this.image.name);
       var config = {
         headers: {
           "content-type": "multipart/form-data"
         }
       };
       var formData = new FormData();
+      formData.append("category", this.category);
       formData.append("title", this.title);
       formData.append("body", this.body);
+      formData.append("active", this.active);
+      formData.append("date", this.date);
+      formData.append("time", this.time);
+      formData.append("image", this.image, this.image.name);
       axios.post("api/blogs", formData, config).then(function () {
         _this2.color = 'green';
         _this2.snackbar = true;
@@ -2953,6 +3179,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.createDialog = false;
         _this2.loading = false;
       })["catch"](function (error) {
+        console.log(error);
         _this2.color = 'red';
         _this2.snackbar = true;
         _this2.text = "Something is Wrong! Try Again!";
@@ -2963,12 +3190,15 @@ __webpack_require__.r(__webpack_exports__);
     reset: function reset() {
       this.title = '';
       this.body = '';
-      console.log("Ready to reset");
+      this.active = '';
+      this.date = '';
+      this.time = '';
     },
     editBtn: function editBtn(id) {
       var _this3 = this;
 
       axios.get("/api/blogs/" + id).then(function (response) {
+        console.log(response.data);
         _this3.actionData = response.data;
         _this3.updateDialog = true;
         console.log('edit data:', _this3.actionData);
@@ -2986,8 +3216,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       var formData = new FormData();
+      formData.append("category", this.actionData.category);
       formData.append("title", this.actionData.title);
       formData.append("body", this.actionData.body);
+      formData.append("active", this.actionData.active);
+      formData.append("date", this.actionData.date);
+      formData.append("time", this.actionData.time);
       formData.append("_method", "put");
       axios.post("api/blogs/" + this.actionData.id, formData, config).then(function () {
         _this4.color = 'green';
@@ -3045,6 +3279,65 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      breadcrumbItems: [{
+        text: 'Dashboard',
+        disabled: false,
+        href: '/#/admin'
+      }, {
+        text: 'Vuex',
+        disabled: true
+      }]
+    };
+  },
+  created: function created() {
+    // console.log('page route',this.$route)
+    this.fetchAuthPermissions();
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['authPermissions'])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['fetchAuthPermissions']))
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/PermissionsComponent.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/PermissionsComponent.vue?vue&type=script&lang=js& ***!
@@ -3054,8 +3347,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -3447,9 +3738,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append("token", token);
       axios.post("api/userPermissions/", formData).then(function (res) {
-        //    console.log(res.data.permissions);
-        _this7.authUserPermissions = res.data.permissions;
-        console.log('authUserPermissions:', _this7.authUserPermissions);
+        _this7.authUserPermissions = res.data.permissions; //    console.log('authUserPermissions:',this.authUserPermissions);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4043,81 +4332,348 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      search: '',
-      createDialog: false,
-      deleteDialog: false,
+      valid: true,
+      dialog: false,
+      loading: false,
+      snackbar: false,
+      selected: [],
+      text: "",
+      roles: [],
+      success: "",
+      error: "",
+      options: {
+        sortBy: ["name"],
+        sortDesc: [true]
+      },
+      rules: {
+        required: function required(v) {
+          return !!v || "This Field is Required";
+        },
+        min: function min(v) {
+          return v.length >= 5 || "Minimum 5 Chracters Required";
+        },
+        validEmail: function validEmail(v) {
+          return /.+@.+\..+/.test(v) || "E-mail must be valid";
+        }
+      },
       headers: [{
-        text: 'Index',
-        align: 'start',
-        sortable: true,
-        value: 'id'
-      }, {
-        text: 'Image',
-        align: 'start',
+        text: "#",
+        align: "left",
         sortable: false,
-        value: 'image'
+        value: "id"
       }, {
-        text: 'Name',
-        align: 'start',
-        sortable: true,
-        value: 'name'
+        text: "Name",
+        value: "name"
       }, {
-        text: 'Date',
-        align: 'start',
-        sortable: true,
-        value: 'created_at'
+        text: "Email",
+        value: "email"
       }, {
-        text: 'Actions',
-        value: 'actions',
-        sortable: false
+        text: "Role",
+        value: "role"
+      }, {
+        text: "Created At",
+        value: "created_at"
+      }, {
+        text: "Updated At",
+        value: "updated_at"
+      }, {
+        text: "Actions",
+        value: "action"
       }],
-      desserts: [{
-        id: 1,
-        image: 'default.jpg',
-        name: 'Capsules',
-        created_at: '15-01-2021'
-      }, {
-        id: 2,
-        image: 'default.jpg',
-        name: 'Injections',
-        created_at: '15-01-2021'
-      }, {
-        id: 3,
-        image: 'default.jpg',
-        name: 'Tablets',
-        created_at: '15-01-2021'
-      }, {
-        id: 4,
-        image: 'default.jpg',
-        name: 'Inhalers',
-        created_at: '15-01-2021'
-      }],
-      breadcrumbItems: [{
-        text: 'Dashboard',
-        disabled: false,
-        href: '/#/admin'
-      }, {
-        text: 'Users',
-        disabled: true
-      }]
+      users: [],
+      editedIndex: -1,
+      editedItem: {
+        id: "",
+        name: "",
+        email: "",
+        role: "",
+        password: ""
+      },
+      defaultItem: {
+        id: "",
+        name: "",
+        email: "",
+        role: "",
+        created_at: "",
+        updated_at: ""
+      }
     };
   },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? "New User" : "Edit User";
+    },
+    passwordMatch: function passwordMatch() {
+      return this.editedItem.password != this.editedItem.rpassword ? "Password Does Not Match" : true;
+    }
+  },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
+  },
+  created: function created() {
+    this.initialize();
+  },
   methods: {
-    createItem: function createItem() {
-      this.createDialog = true;
+    uploadPhoto: function uploadPhoto(item) {
+      var _this = this;
+
+      if (this.editedItem.photo != null) {
+        var index = this.users.data.indexOf(item);
+        var formData = new FormData();
+        formData.append("photo", this.editedItem.photo, this.editedItem.photo.name);
+        formData.append("user", item.id);
+        axios.post("/api/user/photo", formData).then(function (res) {
+          _this.users.data[index].photo = res.data.user.photo;
+          _this.editedItem.photo = null;
+        })["catch"](function (err) {
+          return console.log(err.response);
+        });
+      }
+    },
+    updateRole: function updateRole(item) {
+      var _this2 = this;
+
+      var index = this.users.data.indexOf(item);
+      axios.post("/api/user/role", {
+        role: item.role,
+        user: item.id
+      }).then(function (res) {
+        _this2.text = res.data.user.name + "'s Role Updated to " + res.data.user.role;
+        _this2.snackbar = true;
+      })["catch"](function (error) {
+        _this2.text = error.response.data.user.name + "'s Role Cannot Be Updated to " + error.response.data.user.role;
+        _this2.users.data[index].role = error.response.data.user.role;
+        _this2.snackbar = true;
+      });
+    },
+    checkEmail: function checkEmail() {
+      var _this3 = this;
+
+      if (/.+@.+\..+/.test(this.editedItem.email)) {
+        axios.post("/api/email/verify", {
+          email: this.editedItem.email
+        }).then(function (res) {
+          _this3.success = res.data.message;
+          _this3.error = "";
+        })["catch"](function (err) {
+          _this3.success = "";
+          _this3.error = "Email Already Exists";
+        });
+      }
+    },
+    selectAll: function selectAll(e) {
+      this.selected = [];
+
+      if (e.length > 0) {
+        this.selected = e.map(function (val) {
+          return val.id;
+        });
+      }
+    },
+    deleteAll: function deleteAll() {
+      var _this4 = this;
+
+      var decide = confirm("Are you sure you want to delete these items?");
+
+      if (decide) {
+        axios.post("/api/users/delete", {
+          users: this.selected
+        }).then(function (res) {
+          _this4.text = "Records Deleted Successfully!";
+
+          _this4.selected.map(function (val) {
+            var index = _this4.users.indexOf(val);
+
+            _this4.users.splice(index, 1);
+          });
+
+          _this4.snackbar = true;
+        })["catch"](function (err) {
+          console.log(err.response);
+          _this4.text = "Error Deleting Record";
+          _this4.snackbar = true;
+        });
+      }
+    },
+    searchIt: function searchIt(e) {
+      var _this5 = this;
+
+      if (e.length > 3) {
+        axios.get("/api/users/".concat(e)).then(function (res) {
+          return _this5.users = res.data.users;
+        })["catch"](function (err) {
+          return console.dir(err.response);
+        });
+      }
+
+      if (e.length <= 0) {
+        axios.get("/api/users").then(function (res) {
+          return _this5.users = res.data.users;
+        })["catch"](function (err) {
+          return console.dir(err.response);
+        });
+      }
+    },
+    paginate: function paginate(e) {
+      var _this6 = this;
+
+      var sortBy = this.options.sortBy.length == 0 ? "name" : this.options.sortBy[0];
+      var orderBy = this.options.sortDesc.length > 0 && this.options.sortDesc[0] ? "asc" : "desc";
+      axios.get("/api/users?page=".concat(e.page), {
+        params: {
+          per_page: e.itemsPerPage,
+          sort_by: sortBy,
+          order_by: orderBy
+        }
+      }).then(function (res) {
+        _this6.users = res.data.users;
+        _this6.roles = res.data.roles;
+      })["catch"](function (err) {
+        //   if (err.response.status == 401) localStorage.removeItem("token");
+        //   this.$router.push("/login");
+        console.log(err);
+      });
+    },
+    initialize: function initialize() {
+      var _this7 = this;
+
+      // Add a request interceptor
+      axios.interceptors.request.use(function (config) {
+        _this7.loading = true;
+        return config;
+      }, function (error) {
+        _this7.loading = false;
+        return Promise.reject(error);
+      }); // Add a response interceptor
+
+      axios.interceptors.response.use(function (response) {
+        _this7.loading = false;
+        return response;
+      }, function (error) {
+        _this7.loading = false;
+        return Promise.reject(error);
+      });
     },
     editItem: function editItem(item) {
-      this.createDialog = true;
-      console.log(item.id);
-      console.log(item.name);
+      this.editedIndex = this.users.data.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      this.deleteDialog = true;
-      console.log(item.id);
-      console.log(item.name);
+      var _this8 = this;
+
+      var index = this.users.data.indexOf(item);
+      var decide = confirm("Are you sure you want to delete this item?");
+
+      if (decide) {
+        axios["delete"]("/api/users/" + item.id).then(function (res) {
+          _this8.text = "Record Deleted Successfully!";
+          _this8.snackbar = true;
+
+          _this8.users.data.splice(index, 1);
+        })["catch"](function (err) {
+          console.log(err.response);
+          _this8.text = "Error Deleting Record";
+          _this8.snackbar = true;
+        });
+      }
+    },
+    close: function close() {
+      var _this9 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this9.editedItem = Object.assign({}, _this9.defaultItem);
+        _this9.editedIndex = -1;
+      }, 300);
+    },
+    save: function save() {
+      var _this10 = this;
+
+      if (this.editedIndex > -1) {
+        var index = this.editedIndex;
+        axios.put("/api/users/" + this.editedItem.id, this.editedItem).then(function (res) {
+          _this10.text = "Record Updated Successfully!";
+          _this10.snackbar = true;
+          Object.assign(_this10.users.data[index], res.data.user);
+        })["catch"](function (err) {
+          console.log(err.response);
+          _this10.text = "Error Updating Record";
+          _this10.snackbar = true;
+        }); // Object.assign(this.users[this.editedIndex], this.editedItem)
+      } else {
+        axios.post("/api/users", this.editedItem).then(function (res) {
+          _this10.text = "Record Added Successfully!";
+          _this10.snackbar = true;
+
+          _this10.users.data.push(res.data.user);
+        })["catch"](function (err) {
+          console.dir(err);
+          _this10.text = "Error Inserting Record";
+          _this10.snackbar = true;
+        });
+      }
+
+      this.close();
     }
   }
 });
@@ -21484,6 +22040,765 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      define(prototype, method, function(arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  define(Gp, toStringTagSymbol, "Generator");
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -23132,7 +24447,7 @@ var render = function() {
             expression: "snackbar"
           }
         },
-        [_vm._v(_vm._s(_vm.text) + "\n          ")]
+        [_vm._v(_vm._s(_vm.text) + "\n        ")]
       ),
       _vm._v(" "),
       _c(
@@ -23215,7 +24530,7 @@ var render = function() {
                       staticClass: "mb-2",
                       attrs: { color: "red", small: "", dark: "" }
                     },
-                    [_vm._v("Delete")]
+                    [_vm._v("Delete Selected")]
                   ),
                   _vm._v(" "),
                   _c("v-divider", {
@@ -23457,6 +24772,41 @@ var render = function() {
                                           }
                                         },
                                         [
+                                          _c("v-select", {
+                                            staticClass: "rounded-0",
+                                            attrs: {
+                                              items: _vm.categories,
+                                              "item-text": "name",
+                                              "item-value": "id",
+                                              label: "Select",
+                                              outlined: ""
+                                            },
+                                            model: {
+                                              value: _vm.actionData.category,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.actionData,
+                                                  "category",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "actionData.category"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Title",
@@ -23489,10 +24839,7 @@ var render = function() {
                                         },
                                         [
                                           _c("v-text-field", {
-                                            attrs: {
-                                              label: "Body",
-                                              hint: "Enter Blog Body Here"
-                                            },
+                                            attrs: { label: "Body" },
                                             model: {
                                               value: _vm.actionData.body,
                                               callback: function($$v) {
@@ -23505,6 +24852,250 @@ var render = function() {
                                               expression: "actionData.body"
                                             }
                                           })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: { label: "active" },
+                                            model: {
+                                              value: _vm.actionData.active,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.actionData,
+                                                  "active",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "actionData.active"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              attrs: {
+                                                "close-on-content-click": false,
+                                                "nudge-right": 40,
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "min-width": "auto"
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Select Date",
+                                                                "prepend-icon":
+                                                                  "mdi-calendar",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value: _vm.date,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.date = $$v
+                                                                },
+                                                                expression:
+                                                                  "date"
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.editDate,
+                                                callback: function($$v) {
+                                                  _vm.editDate = $$v
+                                                },
+                                                expression: "editDate"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _c("v-date-picker", {
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.editDate = false
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.actionData.date,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.actionData,
+                                                      "date",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "actionData.date"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              ref: "menu",
+                                              attrs: {
+                                                "close-on-content-click": false,
+                                                "nudge-right": 40,
+                                                "return-value": _vm.time,
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "max-width": "290px",
+                                                "min-width": "290px"
+                                              },
+                                              on: {
+                                                "update:returnValue": function(
+                                                  $event
+                                                ) {
+                                                  _vm.time = $event
+                                                },
+                                                "update:return-value": function(
+                                                  $event
+                                                ) {
+                                                  _vm.time = $event
+                                                }
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Select Time",
+                                                                "prepend-icon":
+                                                                  "mdi-clock",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value: _vm.time,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.time = $$v
+                                                                },
+                                                                expression:
+                                                                  "time"
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.editTime,
+                                                callback: function($$v) {
+                                                  _vm.editTime = $$v
+                                                },
+                                                expression: "editTime"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _vm.editTime
+                                                ? _c("v-time-picker", {
+                                                    attrs: { "full-width": "" },
+                                                    on: {
+                                                      "click:minute": function(
+                                                        $event
+                                                      ) {
+                                                        return _vm.$refs.menu.save(
+                                                          _vm.time
+                                                        )
+                                                      }
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.actionData.time,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.actionData,
+                                                          "time",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "actionData.time"
+                                                    }
+                                                  })
+                                                : _vm._e()
+                                            ],
+                                            1
+                                          )
                                         ],
                                         1
                                       )
@@ -23629,11 +25220,43 @@ var render = function() {
                                           }
                                         },
                                         [
+                                          _c("v-select", {
+                                            staticClass: "rounded-0",
+                                            attrs: {
+                                              items: _vm.categories,
+                                              "item-text": "name",
+                                              "item-value": "id",
+                                              label: "Select",
+                                              outlined: ""
+                                            },
+                                            model: {
+                                              value: _vm.category,
+                                              callback: function($$v) {
+                                                _vm.category = $$v
+                                              },
+                                              expression: "category"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Title",
                                               counter: 6,
                                               rules: _vm.titleRules,
+                                              outlined: "",
                                               hint: "Enter Blog Title Here",
                                               required: ""
                                             },
@@ -23662,7 +25285,7 @@ var render = function() {
                                           _c("v-text-field", {
                                             attrs: {
                                               label: "Body",
-                                              hint: "Enter Blog Body Here"
+                                              outlined: ""
                                             },
                                             model: {
                                               value: _vm.body,
@@ -23670,6 +25293,323 @@ var render = function() {
                                                 _vm.body = $$v
                                               },
                                               expression: "body"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-radio-group",
+                                            {
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "label",
+                                                  fn: function() {
+                                                    return [
+                                                      _c("div", [
+                                                        _vm._v("Active ?")
+                                                      ])
+                                                    ]
+                                                  },
+                                                  proxy: true
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.active,
+                                                callback: function($$v) {
+                                                  _vm.active = $$v
+                                                },
+                                                expression: "active"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _c("v-radio", {
+                                                attrs: { value: "Yes" },
+                                                scopedSlots: _vm._u([
+                                                  {
+                                                    key: "label",
+                                                    fn: function() {
+                                                      return [
+                                                        _c("div", [
+                                                          _vm._v("Yes")
+                                                        ])
+                                                      ]
+                                                    },
+                                                    proxy: true
+                                                  }
+                                                ])
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-radio", {
+                                                attrs: { value: "No" },
+                                                scopedSlots: _vm._u([
+                                                  {
+                                                    key: "label",
+                                                    fn: function() {
+                                                      return [
+                                                        _c("div", [
+                                                          _vm._v("No")
+                                                        ])
+                                                      ]
+                                                    },
+                                                    proxy: true
+                                                  }
+                                                ])
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              attrs: {
+                                                "close-on-content-click": false,
+                                                "nudge-right": 40,
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "min-width": "auto"
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Select Date",
+                                                                "prepend-icon":
+                                                                  "mdi-calendar",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value: _vm.date,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.date = $$v
+                                                                },
+                                                                expression:
+                                                                  "date"
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.menu,
+                                                callback: function($$v) {
+                                                  _vm.menu = $$v
+                                                },
+                                                expression: "menu"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _c("v-date-picker", {
+                                                on: {
+                                                  input: function($event) {
+                                                    _vm.menu = false
+                                                  }
+                                                },
+                                                model: {
+                                                  value: _vm.date,
+                                                  callback: function($$v) {
+                                                    _vm.date = $$v
+                                                  },
+                                                  expression: "date"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              ref: "menu",
+                                              attrs: {
+                                                "close-on-content-click": false,
+                                                "nudge-right": 40,
+                                                "return-value": _vm.time,
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "max-width": "290px",
+                                                "min-width": "290px"
+                                              },
+                                              on: {
+                                                "update:returnValue": function(
+                                                  $event
+                                                ) {
+                                                  _vm.time = $event
+                                                },
+                                                "update:return-value": function(
+                                                  $event
+                                                ) {
+                                                  _vm.time = $event
+                                                }
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Select Time",
+                                                                "prepend-icon":
+                                                                  "mdi-clock",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value: _vm.time,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.time = $$v
+                                                                },
+                                                                expression:
+                                                                  "time"
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value: _vm.menu2,
+                                                callback: function($$v) {
+                                                  _vm.menu2 = $$v
+                                                },
+                                                expression: "menu2"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _vm.menu2
+                                                ? _c("v-time-picker", {
+                                                    attrs: { "full-width": "" },
+                                                    on: {
+                                                      "click:minute": function(
+                                                        $event
+                                                      ) {
+                                                        return _vm.$refs.menu.save(
+                                                          _vm.time
+                                                        )
+                                                      }
+                                                    },
+                                                    model: {
+                                                      value: _vm.time,
+                                                      callback: function($$v) {
+                                                        _vm.time = $$v
+                                                      },
+                                                      expression: "time"
+                                                    }
+                                                  })
+                                                : _vm._e()
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        {
+                                          attrs: {
+                                            cols: "12",
+                                            sm: "12",
+                                            md: "12"
+                                          }
+                                        },
+                                        [
+                                          _c("v-file-input", {
+                                            attrs: {
+                                              label: "Upload File",
+                                              outlined: "",
+                                              dense: "",
+                                              "prepend-icon": "mdi-camera",
+                                              accept: "image/*"
+                                            },
+                                            on: {
+                                              change: function($event) {
+                                                return _vm.uploadPhoto()
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.image,
+                                              callback: function($$v) {
+                                                _vm.image = $$v
+                                              },
+                                              expression: "image"
                                             }
                                           })
                                         ],
@@ -23732,6 +25672,61 @@ var render = function() {
           )
         ],
         1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    { attrs: { id: "inspire" } },
+    [
+      _c(
+        "v-container",
+        { attrs: { fluid: "" } },
+        [
+          _c("v-breadcrumbs", {
+            attrs: { items: _vm.breadcrumbItems },
+            scopedSlots: _vm._u([
+              {
+                key: "divider",
+                fn: function() {
+                  return [_c("v-icon", [_vm._v("mdi-chevron-right")])]
+                },
+                proxy: true
+              }
+            ])
+          }),
+          _vm._v(" "),
+          [
+            _vm._v(
+              "\n             " + _vm._s(_vm.authPermissions) + "\n          "
+            )
+          ]
+        ],
+        2
       )
     ],
     1
@@ -23875,9 +25870,6 @@ var render = function() {
               })
             ],
             1
-          ),
-          _vm._v(
-            "\n\n         " + _vm._s(_vm.authUserPermissions) + "\n           "
           ),
           _vm._v(" "),
           _c(
@@ -25122,10 +27114,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&":
-/*!***********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2& ***!
-  \***********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -25141,274 +27133,393 @@ var render = function() {
     "v-app",
     { attrs: { id: "inspire" } },
     [
-      _c(
-        "v-container",
-        { attrs: { fluid: "" } },
-        [
-          _c("v-breadcrumbs", {
-            attrs: { items: _vm.breadcrumbItems },
-            scopedSlots: _vm._u([
-              {
-                key: "divider",
-                fn: function() {
-                  return [_c("v-icon", [_vm._v("mdi-chevron-right")])]
-                },
-                proxy: true
-              }
-            ])
-          }),
-          _vm._v(" "),
-          _c(
-            "v-card",
-            [
-              _c(
-                "v-card-title",
-                [
+      _c("v-data-table", {
+        staticClass: "elevation-1",
+        attrs: {
+          "item-key": "name",
+          color: "error",
+          loading: _vm.loading,
+          "loading-text": "Loading... Please wait",
+          headers: _vm.headers,
+          "server-items-length": _vm.users.total,
+          options: _vm.options,
+          items: _vm.users.data,
+          "items-per-page": 5,
+          "show-select": "",
+          "footer-props": {
+            itemsPerPageOptions: [5, 10, 15],
+            itemsPerPageText: "users Per Page",
+            "show-current-page": true,
+            "show-first-last-page": true
+          }
+        },
+        on: {
+          pagination: _vm.paginate,
+          "update:options": function($event) {
+            _vm.options = $event
+          },
+          input: _vm.selectAll
+        },
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "top",
+              fn: function() {
+                return [
                   _c(
-                    "v-btn",
-                    {
-                      attrs: { medium: "", color: "green", dark: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.createItem()
-                        }
-                      }
-                    },
+                    "v-toolbar",
+                    { attrs: { flat: "", color: "dark" } },
                     [
-                      _c("v-icon", { attrs: { dark: "", medium: "" } }, [
-                        _vm._v(" mdi-plus ")
-                      ]),
-                      _vm._v(" New ")
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      "append-icon": "mdi-magnify",
-                      label: "Search",
-                      "single-line": "",
-                      "hide-details": ""
-                    },
-                    model: {
-                      value: _vm.search,
-                      callback: function($$v) {
-                        _vm.search = $$v
-                      },
-                      expression: "search"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-data-table", {
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.desserts,
-                  search: _vm.search
-                },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "item.image",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _c("img", {
-                            staticStyle: { width: "60px", "margin-top": "5px" },
-                            attrs: { src: "assets/img/" + item.image }
-                          })
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.actions",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-2",
-                              attrs: { small: "", color: "cyan" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.editItem(item)
-                                }
-                              }
-                            },
-                            [_vm._v(" mdi-pencil ")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-icon",
-                            {
-                              attrs: { small: "", color: "red" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.deleteItem(item)
-                                }
-                              }
-                            },
-                            [_vm._v(" mdi-delete ")]
-                          )
-                        ]
-                      }
-                    }
-                  ],
-                  null,
-                  true
-                )
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            { attrs: { justify: "center" } },
-            [
-              _c(
-                "v-dialog",
-                {
-                  attrs: { persistent: "", "max-width": "290" },
-                  model: {
-                    value: _vm.deleteDialog,
-                    callback: function($$v) {
-                      _vm.deleteDialog = $$v
-                    },
-                    expression: "deleteDialog"
-                  }
-                },
-                [
-                  _c(
-                    "v-card",
-                    [
-                      _c("v-card-title", { staticClass: "headline" }, [
-                        _vm._v("Confirm To Delete.")
-                      ]),
+                      _c("v-toolbar-title", [_vm._v("User Management System")]),
                       _vm._v(" "),
-                      _c("v-card-text", {
-                        staticClass: " text-h6 text-center"
+                      _c("v-divider", {
+                        staticClass: "mx-4",
+                        attrs: { inset: "", vertical: "" }
                       }),
                       _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "red darken-1", text: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteDialog = false
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                  Cancel\n                  "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "green darken-1", text: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteDialog = false
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                  Confirm\n                  "
-                              )
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            { attrs: { justify: "center" } },
-            [
-              _c(
-                "v-dialog",
-                {
-                  attrs: { persistent: "", "max-width": "600px" },
-                  model: {
-                    value: _vm.createDialog,
-                    callback: function($$v) {
-                      _vm.createDialog = $$v
-                    },
-                    expression: "createDialog"
-                  }
-                },
-                [
-                  _c(
-                    "v-card",
-                    [
-                      _c("v-card-title", [
-                        _c("span", { staticClass: "headline" }, [
-                          _vm._v("New Category")
-                        ])
-                      ]),
+                      _c("v-spacer"),
                       _vm._v(" "),
                       _c(
-                        "v-card-text",
+                        "v-dialog",
+                        {
+                          attrs: { "max-width": "500px" },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                return [
+                                  _c(
+                                    "v-btn",
+                                    _vm._g(
+                                      {
+                                        staticClass: "mb-2",
+                                        attrs: { color: "error", dark: "" }
+                                      },
+                                      on
+                                    ),
+                                    [_vm._v("Add New user")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      staticClass: "mb-2 mr-2",
+                                      attrs: { color: "error", dark: "" },
+                                      on: { click: _vm.deleteAll }
+                                    },
+                                    [_vm._v("Delete")]
+                                  )
+                                ]
+                              }
+                            }
+                          ]),
+                          model: {
+                            value: _vm.dialog,
+                            callback: function($$v) {
+                              _vm.dialog = $$v
+                            },
+                            expression: "dialog"
+                          }
+                        },
                         [
+                          _vm._v(" "),
                           _c(
-                            "v-container",
+                            "v-card",
                             [
+                              _c("v-card-title", [
+                                _c("span", { staticClass: "headline" }, [
+                                  _vm._v(_vm._s(_vm.formTitle))
+                                ])
+                              ]),
+                              _vm._v(" "),
                               _c(
-                                "v-row",
+                                "v-form",
+                                {
+                                  attrs: { method: "post" },
+                                  on: {
+                                    sumbit: function($event) {
+                                      $event.stopPropagation()
+                                      $event.preventDefault()
+                                      return _vm.save($event)
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.valid,
+                                    callback: function($$v) {
+                                      _vm.valid = $$v
+                                    },
+                                    expression: "valid"
+                                  }
+                                },
                                 [
                                   _c(
-                                    "v-col",
-                                    {
-                                      attrs: { cols: "12", sm: "12", md: "7" }
-                                    },
+                                    "v-card-text",
                                     [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Category Name",
-                                          hint: "Enter Name Of Category Here"
-                                        }
-                                      })
+                                      _c(
+                                        "v-container",
+                                        [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  attrs: {
+                                                    cols: "12",
+                                                    sm: "12"
+                                                  }
+                                                },
+                                                [
+                                                  _c("v-text-field", {
+                                                    attrs: {
+                                                      color: "error",
+                                                      label: "Name",
+                                                      rules: [
+                                                        _vm.rules.required,
+                                                        _vm.rules.min
+                                                      ]
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.name,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "name",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.name"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _vm.editedIndex == -1
+                                            ? _c(
+                                                "v-row",
+                                                [
+                                                  _c(
+                                                    "v-col",
+                                                    {
+                                                      attrs: {
+                                                        cols: "12",
+                                                        sm: "12"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          rules: [
+                                                            _vm.rules.required
+                                                          ],
+                                                          type: "password",
+                                                          color: "error",
+                                                          label: "Type Password"
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.editedItem
+                                                              .password,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.editedItem,
+                                                              "password",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "editedItem.password"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    {
+                                                      attrs: {
+                                                        cols: "12",
+                                                        sm: "12"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          rules: [
+                                                            _vm.rules.required,
+                                                            _vm.passwordMatch
+                                                          ],
+                                                          type: "password",
+                                                          color: "error",
+                                                          label:
+                                                            "Retype Password"
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.editedItem
+                                                              .rpassword,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.editedItem,
+                                                              "rpassword",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "editedItem.rpassword"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-col",
+                                                    {
+                                                      attrs: {
+                                                        cols: "12",
+                                                        sm: "12"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("v-text-field", {
+                                                        attrs: {
+                                                          type: "email",
+                                                          "success-messages":
+                                                            _vm.success,
+                                                          "error-messages":
+                                                            _vm.error,
+                                                          rules: [
+                                                            _vm.rules.required,
+                                                            _vm.rules.validEmail
+                                                          ],
+                                                          color: "error",
+                                                          autocomplete: "off",
+                                                          label: "Email"
+                                                        },
+                                                        on: {
+                                                          blur: _vm.checkEmail
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.editedItem
+                                                              .email,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.editedItem,
+                                                              "email",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "editedItem.email"
+                                                        }
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  attrs: {
+                                                    cols: "12",
+                                                    sm: "12"
+                                                  }
+                                                },
+                                                [
+                                                  _c("v-select", {
+                                                    attrs: {
+                                                      rules: [
+                                                        _vm.rules.required
+                                                      ],
+                                                      items: _vm.roles,
+                                                      color: "error",
+                                                      label: "Select Role"
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.editedItem.role,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.editedItem,
+                                                          "role",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "editedItem.role"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
                                   ),
                                   _vm._v(" "),
                                   _c(
-                                    "v-col",
-                                    {
-                                      attrs: { cols: "12", sm: "12", md: "5" }
-                                    },
+                                    "v-card-actions",
                                     [
-                                      _c("v-file-input", {
-                                        attrs: {
-                                          accept: "image/*",
-                                          label: "Upload Image"
-                                        }
-                                      })
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "error darken-1",
+                                            text: ""
+                                          },
+                                          on: { click: _vm.close }
+                                        },
+                                        [_vm._v("Cancel")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            type: "submit",
+                                            disabled: !_vm.valid,
+                                            color: "error darken-1",
+                                            text: ""
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.save($event)
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Save")]
+                                      )
                                     ],
                                     1
                                   )
@@ -25420,57 +27531,235 @@ var render = function() {
                           )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
                       _c(
-                        "v-card-actions",
+                        "v-col",
+                        { attrs: { cols: "12" } },
                         [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "red darken-1", text: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.createDialog = false
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                  Cancel\n                  "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "green darken-1", text: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.createDialog = false
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                  Submit\n                  "
-                              )
-                            ]
-                          )
+                          _c("v-text-field", {
+                            staticClass: "mx-4",
+                            attrs: { color: "#ff5252", label: "Search..." },
+                            on: { input: _vm.searchIt }
+                          })
                         ],
                         1
                       )
                     ],
                     1
                   )
-                ],
-                1
-              )
-            ],
-            1
+                ]
+              },
+              proxy: true
+            },
+            {
+              key: "item.role",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c(
+                    "v-edit-dialog",
+                    {
+                      attrs: {
+                        large: "",
+                        block: "",
+                        persistent: "",
+                        "return-value": item.role
+                      },
+                      on: {
+                        "update:returnValue": function($event) {
+                          return _vm.$set(item, "role", $event)
+                        },
+                        "update:return-value": function($event) {
+                          return _vm.$set(item, "role", $event)
+                        },
+                        save: function($event) {
+                          return _vm.updateRole(item)
+                        }
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "input",
+                            fn: function() {
+                              return [
+                                _c("h4", [_vm._v("Change Role")]),
+                                _vm._v(" "),
+                                _c("v-select", {
+                                  attrs: {
+                                    rules: [_vm.rules.required],
+                                    items: _vm.roles,
+                                    color: "error",
+                                    label: "Select Role"
+                                  },
+                                  model: {
+                                    value: item.role,
+                                    callback: function($$v) {
+                                      _vm.$set(item, "role", $$v)
+                                    },
+                                    expression: "item.role"
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    },
+                    [_vm._v("\n        " + _vm._s(item.role) + "\n        ")]
+                  )
+                ]
+              }
+            },
+            {
+              key: "item.photo",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c(
+                    "v-edit-dialog",
+                    {
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "input",
+                            fn: function() {
+                              return [
+                                _c("v-file-input", {
+                                  attrs: {
+                                    label: "Select File",
+                                    placeholder: "Upload Avatar",
+                                    accept:
+                                      "image/jpg, image/png, image/bmp, image/jpeg"
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.uploadPhoto(item)
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.editedItem.photo,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.editedItem, "photo", $$v)
+                                    },
+                                    expression: "editedItem.photo"
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    },
+                    [
+                      _c(
+                        "v-list-item-avatar",
+                        [
+                          _c("v-img", {
+                            staticClass: "grey lighten-2",
+                            attrs: { src: item.photo, "aspect-ratio": "1" }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            },
+            {
+              key: "item.actions",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c(
+                    "v-icon",
+                    {
+                      staticClass: "mr-2",
+                      attrs: { small: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.editItem(item)
+                        }
+                      }
+                    },
+                    [_vm._v("mdi-content-save-edit-outline")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-icon",
+                    {
+                      attrs: { small: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteItem(item)
+                        }
+                      }
+                    },
+                    [_vm._v("mdi-delete")]
+                  )
+                ]
+              }
+            },
+            {
+              key: "no-data",
+              fn: function() {
+                return [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "error" },
+                      on: { click: _vm.initialize }
+                    },
+                    [_vm._v("Reset")]
+                  )
+                ]
+              },
+              proxy: true
+            }
+          ],
+          null,
+          true
+        )
+      }),
+      _vm._v(" "),
+      _c(
+        "v-snackbar",
+        {
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _vm._v("\n    " + _vm._s(_vm.text) + "\n    "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "error", text: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("Close")]
           )
         ],
         1
@@ -85307,6 +87596,1271 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_vue__;
 
 /***/ }),
 
+/***/ "./node_modules/vuex/dist/vuex.esm.js":
+/*!********************************************!*\
+  !*** ./node_modules/vuex/dist/vuex.esm.js ***!
+  \********************************************/
+/*! exports provided: default, Store, createLogger, createNamespacedHelpers, install, mapActions, mapGetters, mapMutations, mapState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createLogger", function() { return createLogger; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createNamespacedHelpers", function() { return createNamespacedHelpers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapActions", function() { return mapActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapGetters", function() { return mapGetters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
+/*!
+ * vuex v3.6.2
+ * (c) 2021 Evan You
+ * @license MIT
+ */
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+}
+
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  }, { prepend: true });
+
+  store.subscribeAction(function (action, state) {
+    devtoolHook.emit('vuex:action', action, state);
+  }, { prepend: true });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+function find (list, f) {
+  return list.filter(f)[0]
+}
+
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+function deepCopy (obj, cache) {
+  if ( cache === void 0 ) cache = [];
+
+  // just return if obj is immutable value
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // if obj is hit, it is in circular structure
+  var hit = find(cache, function (c) { return c.original === obj; });
+  if (hit) {
+    return hit.copy
+  }
+
+  var copy = Array.isArray(obj) ? [] : {};
+  // put the copy into cache at first
+  // because we want to refer it in recursive deepCopy
+  cache.push({
+    original: obj,
+    copy: copy
+  });
+
+  Object.keys(obj).forEach(function (key) {
+    copy[key] = deepCopy(obj[key], cache);
+  });
+
+  return copy
+}
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if ((true)) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  var child = parent.getChild(key);
+
+  if (!child) {
+    if ((true)) {
+      console.warn(
+        "[vuex] trying to unregister module '" + key + "', which is " +
+        "not registered"
+      );
+    }
+    return
+  }
+
+  if (!child.runtime) {
+    return
+  }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
+};
+
+function update (path, targetModule, newModule) {
+  if ((true)) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if ((true)) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if ((true)) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+  this._makeLocalGettersCache = Object.create(null);
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if ((true)) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    ( true) &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if ((true)) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1.state); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in after action subscribers: ");
+          console.error(e);
+        }
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in error action subscribers: ");
+          console.error(e);
+        }
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if ((true)) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure environment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      if ((true)) {
+        if (moduleName in parentState) {
+          console.warn(
+            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
+          );
+        }
+      }
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if ((true)) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if ((true)) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if ((true)) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if ((true)) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  if (( true) && !isValidMap(states)) {
+    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept another params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  if (( true) && !isValidMap(mutations)) {
+    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  if (( true) && !isValidMap(getters)) {
+    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (( true) && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  if (( true) && !isValidMap(actions)) {
+    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  if (!isValidMap(map)) {
+    return []
+  }
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Validate whether given map is valid or not
+ * @param {*} map
+ * @return {Boolean}
+ */
+function isValidMap (map) {
+  return Array.isArray(map) || isObject(map)
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (( true) && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+// Credits: borrowed code from fcomb/redux-logger
+
+function createLogger (ref) {
+  if ( ref === void 0 ) ref = {};
+  var collapsed = ref.collapsed; if ( collapsed === void 0 ) collapsed = true;
+  var filter = ref.filter; if ( filter === void 0 ) filter = function (mutation, stateBefore, stateAfter) { return true; };
+  var transformer = ref.transformer; if ( transformer === void 0 ) transformer = function (state) { return state; };
+  var mutationTransformer = ref.mutationTransformer; if ( mutationTransformer === void 0 ) mutationTransformer = function (mut) { return mut; };
+  var actionFilter = ref.actionFilter; if ( actionFilter === void 0 ) actionFilter = function (action, state) { return true; };
+  var actionTransformer = ref.actionTransformer; if ( actionTransformer === void 0 ) actionTransformer = function (act) { return act; };
+  var logMutations = ref.logMutations; if ( logMutations === void 0 ) logMutations = true;
+  var logActions = ref.logActions; if ( logActions === void 0 ) logActions = true;
+  var logger = ref.logger; if ( logger === void 0 ) logger = console;
+
+  return function (store) {
+    var prevState = deepCopy(store.state);
+
+    if (typeof logger === 'undefined') {
+      return
+    }
+
+    if (logMutations) {
+      store.subscribe(function (mutation, state) {
+        var nextState = deepCopy(state);
+
+        if (filter(mutation, prevState, nextState)) {
+          var formattedTime = getFormattedTime();
+          var formattedMutation = mutationTransformer(mutation);
+          var message = "mutation " + (mutation.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c prev state', 'color: #9E9E9E; font-weight: bold', transformer(prevState));
+          logger.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
+          logger.log('%c next state', 'color: #4CAF50; font-weight: bold', transformer(nextState));
+          endMessage(logger);
+        }
+
+        prevState = nextState;
+      });
+    }
+
+    if (logActions) {
+      store.subscribeAction(function (action, state) {
+        if (actionFilter(action, state)) {
+          var formattedTime = getFormattedTime();
+          var formattedAction = actionTransformer(action);
+          var message = "action " + (action.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c action', 'color: #03A9F4; font-weight: bold', formattedAction);
+          endMessage(logger);
+        }
+      });
+    }
+  }
+}
+
+function startMessage (logger, message, collapsed) {
+  var startMessage = collapsed
+    ? logger.groupCollapsed
+    : logger.group;
+
+  // render
+  try {
+    startMessage.call(logger, message);
+  } catch (e) {
+    logger.log(message);
+  }
+}
+
+function endMessage (logger) {
+  try {
+    logger.groupEnd();
+  } catch (e) {
+    logger.log('—— log end ——');
+  }
+}
+
+function getFormattedTime () {
+  var time = new Date();
+  return (" @ " + (pad(time.getHours(), 2)) + ":" + (pad(time.getMinutes(), 2)) + ":" + (pad(time.getSeconds(), 2)) + "." + (pad(time.getMilliseconds(), 3)))
+}
+
+function repeat (str, times) {
+  return (new Array(times + 1)).join(str)
+}
+
+function pad (num, maxLength) {
+  return repeat('0', maxLength - num.toString().length) + num
+}
+
+var index = {
+  Store: Store,
+  install: install,
+  version: '3.6.2',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers,
+  createLogger: createLogger
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (index);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -85382,21 +88936,24 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vuetify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./vuetify */ "./resources/js/vuetify.js");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
-/* harmony import */ var _components_IndexComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/IndexComponent.vue */ "./resources/js/components/IndexComponent.vue");
+/* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store/store */ "./resources/js/store/store.js");
+/* harmony import */ var _components_IndexComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/IndexComponent.vue */ "./resources/js/components/IndexComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
 
  //Components
 
  //vue instance
 
 new Vue({
+  store: _store_store__WEBPACK_IMPORTED_MODULE_2__["store"],
   el: '#app',
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   vuetify: _vuetify__WEBPACK_IMPORTED_MODULE_0__["default"],
   components: {
-    'index': _components_IndexComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    'index': _components_IndexComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 });
 
@@ -85898,6 +89455,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/blog/VuexComponent.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/blog/VuexComponent.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./VuexComponent.vue?vue&type=template&id=e2b407ae& */ "./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae&");
+/* harmony import */ var _VuexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./VuexComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _VuexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/blog/VuexComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VuexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./VuexComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/blog/VuexComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VuexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./VuexComponent.vue?vue&type=template&id=e2b407ae& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/blog/VuexComponent.vue?vue&type=template&id=e2b407ae&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VuexComponent_vue_vue_type_template_id_e2b407ae___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/users/PermissionsComponent.vue":
 /*!****************************************************************!*\
   !*** ./resources/js/components/users/PermissionsComponent.vue ***!
@@ -86114,7 +89740,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UsersComponent.vue?vue&type=template&id=f0a534b2& */ "./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&");
+/* harmony import */ var _UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true& */ "./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true&");
 /* harmony import */ var _UsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UsersComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/users/UsersComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -86126,11 +89752,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _UsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  null,
+  "f0a534b2",
   null
   
 )
@@ -86156,19 +89782,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2& ***!
-  \*****************************************************************************************/
+/***/ "./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true& ***!
+  \*****************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./UsersComponent.vue?vue&type=template&id=f0a534b2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/users/UsersComponent.vue?vue&type=template&id=f0a534b2&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersComponent_vue_vue_type_template_id_f0a534b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -86196,8 +89822,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_users_PermissionsComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/users/PermissionsComponent */ "./resources/js/components/users/PermissionsComponent.vue");
 /* harmony import */ var _components_users_ProfileComponent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/users/ProfileComponent */ "./resources/js/components/users/ProfileComponent.vue");
 /* harmony import */ var _components_blog_BlogComponent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/blog/BlogComponent */ "./resources/js/components/blog/BlogComponent.vue");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _components_blog_VuexComponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/blog/VuexComponent */ "./resources/js/components/blog/VuexComponent.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_13__);
 
  //Auth components
 
@@ -86212,6 +89839,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  //Blog Components
+
 
 
 
@@ -86255,12 +89883,16 @@ var routes = [{
     component: _components_adminpanel_SettingsComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
     name: 'Settings'
   }, {
+    path: '/vuex',
+    component: _components_blog_VuexComponent__WEBPACK_IMPORTED_MODULE_12__["default"],
+    name: 'Vuex'
+  }, {
     path: '/blogs',
     component: _components_blog_BlogComponent__WEBPACK_IMPORTED_MODULE_11__["default"],
     name: 'Blogs'
   }],
   beforeEnter: function beforeEnter(to, from, next) {
-    axios__WEBPACK_IMPORTED_MODULE_12___default.a.get('api/userVarify').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_13___default.a.get('api/userVarify').then(function (res) {
       return next();
     })["catch"](function (err) {
       return next('/login');
@@ -86281,6 +89913,83 @@ router.beforeEach(function (to, from, next) {
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "./resources/js/store/store.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/store.js ***!
+  \*************************************/
+/*! exports provided: store */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_2___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_3__["default"]);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
+  //Vuex States
+  state: {
+    permissions: []
+  },
+  //Getters 
+  getters: {
+    authPermissions: function authPermissions(state) {
+      return state.permissions;
+    }
+  },
+  //mutation
+  mutations: {
+    setPermissions: function setPermissions(state, fetchedData) {
+      return state.permissions = fetchedData;
+    }
+  },
+  //mutation with actions
+  actions: {
+    fetchAuthPermissions: function fetchAuthPermissions(_ref) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var commit, token, formData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                commit = _ref.commit;
+                token = localStorage.getItem('token');
+                formData = new FormData();
+                formData.append("token", token);
+                _context.next = 6;
+                return axios.post("api/userPermissions/", formData);
+
+              case 6:
+                response = _context.sent;
+                commit('setPermissions', response.data.permissions);
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
+});
 
 /***/ }),
 

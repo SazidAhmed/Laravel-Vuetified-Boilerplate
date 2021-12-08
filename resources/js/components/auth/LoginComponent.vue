@@ -117,11 +117,9 @@
                 .then(res =>{
                     console.log(res.data);
                     localStorage.setItem('token', res.data.token)
-                    localStorage.setItem('permissions', res.data.permissions)
+                    // localStorage.setItem('permissions', res.data.permissions)
                     localStorage.setItem('loggedIn', true)
                     this.$router.push('/admin')
-                    
-                    
                 })
                 .catch(err => {
                     this.text = err.response.data.status;

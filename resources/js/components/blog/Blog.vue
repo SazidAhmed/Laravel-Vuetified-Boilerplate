@@ -32,6 +32,9 @@
                 <!-- datatable -->                        
                 <v-data-table class="elevation-1" :headers="headers" :items="blogs" :search="search" :loading="loading"
                     loading-text="Loading... Please wait" :footer-props="{itemsPerPageOptions: [5,10,15],itemsPerPageText: 'Data Per Page','show-current-page': true,'show-first-last-page': true}">
+                    <template v-slot:[`item.image`] ="{ item }">
+                        <img :src="item.image" style="width: 60px; margin-top: 5px;" />
+                    </template>
                     <template v-slot:[`item.actions`]="{ item }" >
                         <v-icon small color="cyan" class="mr-2" @click="editBtn(item.id)"> mdi-pencil </v-icon>
                         <v-icon small color="red"  @click="deleteBtn(item.id)"> mdi-delete </v-icon>
@@ -86,12 +89,12 @@
                             <v-row>
                                 <v-col cols="12" sm="12" md="12">
                                     <v-select
+                                        v-model="actionData.category"
                                         :items="categories"
                                         item-text="name"
                                         item-value="id"
-                                        label="Select"
+                                        label="Select Here"
                                         class="rounded-0"
-                                        v-model="actionData.category"
                                         outlined
                                     ></v-select>
                                 </v-col>
@@ -101,10 +104,23 @@
                                 <v-col cols="12" sm="12" md="12" >
                                     <v-text-field label="Body" v-model="actionData.body"></v-text-field>
                                 </v-col>
-                                 <v-col cols="12" sm="12" md="12" >
-                                    <v-text-field label="active" v-model="actionData.active"></v-text-field>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-radio-group v-model="actionData.active">
+                                        <template v-slot:label>
+                                            <div>Active ?</div>
+                                        </template>
+                                        <v-radio value="Yes">
+                                            <template v-slot:label>
+                                            <div>Yes</div>
+                                            </template>
+                                        </v-radio>
+                                        <v-radio value="No">
+                                            <template v-slot:label>
+                                            <div>No</div>
+                                            </template>
+                                        </v-radio>
+                                    </v-radio-group>
                                 </v-col>
-
                                 <v-col cols="12" sm="12" md="12" >
                                     <v-menu
                                         v-model="editDate"
@@ -116,7 +132,7 @@
                                     >
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-text-field
-                                            v-model="date"
+                                            v-model="actionData.date"
                                             label="Select Date"
                                             prepend-icon="mdi-calendar"
                                             readonly
@@ -144,7 +160,7 @@
                                     >
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field
-                                        v-model="time"
+                                        v-model="actionData.time"
                                         label="Select Time"
                                         prepend-icon="mdi-clock"
                                         readonly
@@ -159,6 +175,16 @@
                                         @click:minute="$refs.menu.save(time)"
                                     ></v-time-picker>
                                     </v-menu>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12" >
+                                    <v-file-input
+                                        label="Upload File"
+                                        outlined
+                                        dense
+                                        prepend-icon="mdi-camera"
+                                        accept="image/*"
+                                        v-model="image"
+                                    ></v-file-input>
                                 </v-col>
                             </v-row>
                             </v-container>
@@ -193,7 +219,7 @@
                                         :items="categories"
                                         item-text="name"
                                         item-value="id"
-                                        label="Select"
+                                        label="Select Here"
                                         class="rounded-0"
                                         v-model="category"
                                         outlined
@@ -205,7 +231,7 @@
                                 <v-col cols="12" sm="12" md="12" >
                                     <v-text-field label="Body" v-model="body" outlined></v-text-field>
                                 </v-col>
-                                 <v-col cols="12" sm="12" md="12" >
+                                <v-col cols="12" sm="12" md="12" >
                                     <v-radio-group v-model="active">
                                         <template v-slot:label>
                                             <div>Active ?</div>
@@ -285,7 +311,6 @@
                                         prepend-icon="mdi-camera"
                                         accept="image/*"
                                         v-model="image"
-                                        @change="uploadPhoto()"
                                     ></v-file-input>
                                 </v-col>
                             </v-row>
@@ -305,6 +330,7 @@
 </template>
 
 <script>
+import axios from 'axios'
     export default {
         data () {
             return {
@@ -329,6 +355,7 @@
                 deleteDialog: false,
                 headers: [
                     { text: 'ID', align: 'start', sortable: true, value: 'id'},
+                    { text: 'Image', align: 'start', sortable: false, value: 'image'},
                     { text: 'Category', align: 'start', sortable: false, value: 'category'},
                     { text: 'Title', align: 'start', sortable: false, value: 'title'},
                     { text: 'Body', align: 'start', sortable: true, value: 'body'},
@@ -359,18 +386,8 @@
                         disabled: false,
                         href: '/#/admin',
                     },
-                     {
-                        text: 'Users',
-                        disabled: false,
-                        href: '/#/users',
-                    },
                     {
-                        text: 'Roles',
-                        disabled: false,
-                        href: '/#/roles',
-                    },
-                    {
-                        text: 'Permissions',
+                        text: 'blog',
                         disabled: true,
                     },
                 ],
@@ -388,17 +405,18 @@
         },
 
         methods:{
-            uploadPhoto() {
-                if(this.image != null){
-                    console.log('ok');
-                    // console.log(e);
-                }
-                // this.image = e.target.files[0];
+            reset(){
+                this.category='';
+                this.title='';
+                this.body='';
+                this.active='';
+                this.date='';
+                this.time='';
             },
             getBlogs(){
                 this.loading = true;
                 axios
-                    .get("/api/blogs")
+                    .get("/api/list")
                     .then((response) => {
                         this.blogs = response.data.blogs;
                         this.loading = false;
@@ -429,7 +447,7 @@
                     formData.append("time", this.time);
                     formData.append("image", this.image, this.image.name);
                 axios
-                    .post("api/blogs", formData, config)
+                    .post("api/create", formData, config)
                     .then(() => {
                         this.color = 'green';
                         this.snackbar = true;
@@ -450,18 +468,10 @@
                         this.loading = false;
                     });
             },
-
-            reset(){
-                this.title='';
-                this.body='';
-                this.active='';
-                this.date='';
-                this.time='';
-            },
            
             editBtn(id) {
                  axios
-                    .get("/api/blogs/" + id)
+                    .get("/api/getById/" + id)
                         .then((response) => {
                             console.log(response.data);
                             this.actionData = response.data;
@@ -486,9 +496,10 @@
                     formData.append("active", this.actionData.active);
                     formData.append("date", this.actionData.date);
                     formData.append("time", this.actionData.time);
+                     formData.append("image", this.image, this.image.name);
                     formData.append("_method", "put");
                 axios
-                    .post("api/blogs/" + this.actionData.id, formData, config)
+                    .post("api/update/" + this.actionData.id, formData, config)
                     .then(() => {
                         this.color = 'green';
                         this.snackbar = true;
@@ -510,7 +521,7 @@
 
             deleteBtn(id) {
                 axios
-                    .get("/api/blogs/" + id)
+                    .get("/api/getById/" + id)
                         .then((response) => {
                             this.actionData = response.data;
                             console.log('delete data:',this.actionData);
@@ -523,7 +534,7 @@
             deleteData(){
                 this.loading = true;
                 axios
-                    .delete("api/blogs/" + this.actionData.id)
+                    .delete("api/delete/" + this.actionData.id)
                     .then(() => {
                         this.color = 'green';
                         this.snackbar = true;
